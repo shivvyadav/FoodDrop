@@ -7,7 +7,7 @@ export async function proxy(req: NextRequest) {
     req,
     secret: process.env.AUTH_SECRET,
   });
-  console.log(token);
+  // console.log(token);
   const Role = token?.role;
 
   const publicPages = ['/', '/login', '/register'];
