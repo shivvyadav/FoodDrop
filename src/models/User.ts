@@ -11,8 +11,8 @@ export interface IUser {
   forgotPasswordTokenExpiry?: Date;
   verifyToken?: String;
   verifyTokenExpiry?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userSchema = new Schema<IUser>(
