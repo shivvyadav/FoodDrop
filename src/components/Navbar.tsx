@@ -1,8 +1,5 @@
 'use client';
-
-import fooddroplogo from '@/assets/fooddroplogo.png';
 import { motion, MotionConfig } from 'motion/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import AnimatedHamburgerButton from './ui/AnimatedHamburgerButton';
