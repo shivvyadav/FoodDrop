@@ -10,10 +10,16 @@ import {
   Settings,
   ShoppingCart,
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileMenu({ user }: { user: any }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { cartData } = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -28,12 +34,15 @@ export default function ProfileMenu({ user }: { user: any }) {
   return (
     <div ref={ref} className="relative flex gap-2 md:gap-4">
       {user?.role === 'user' && (
-        <div className="relative flex size-8 items-center justify-center rounded-full bg-white">
+        <button
+          onClick={() => router.push('/cart')}
+          className="relative flex size-8 items-center justify-center rounded-full bg-white"
+        >
           <ShoppingCart className="size-5 text-black" />
           <span className="text-md absolute -top-1.5 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-            {user?.cart?.length || 0}
+            {cartData?.length || 0}
           </span>
-        </div>
+        </button>
       )}
 
       {/* user profile */}
