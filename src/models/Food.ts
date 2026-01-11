@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 
-interface IFood {
+export interface IFood {
+  _id?: mongoose.Types.ObjectId;
   name: string;
   image: string;
   price: number;
   category: string;
-  quantity: number;
+  type?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,7 +30,7 @@ const foodSchema = new mongoose.Schema<IFood>(
       enum: [
         'Pizza',
         'Burgers',
-        'Momos',
+        'Momo',
         'Chowmein',
         'Chatpate',
         'Pani Puri',
@@ -42,9 +43,10 @@ const foodSchema = new mongoose.Schema<IFood>(
       ],
       required: [true, 'Category is required'],
     },
-    quantity: {
-      type: Number,
-      required: [true, 'Quantity is required'],
+    type: {
+      type: String,
+      enum: ['Veg', 'Non-Veg'],
+      required: [true, 'Type is required'],
     },
   },
   {
