@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Montserrat, Inter, Chewy, Chela_One } from 'next/font/google';
 import './globals.css';
-import Provider from '@/components/Provider';
+import AuthProvider from '@/components/AuthProvider';
 import StoreProvider from '@/redux/StoreProvider';
+import InitAllUser from '@/InitAllUser';
+import InitAllFoods from '@/InitAllFoods';
 
 export const montserrat = Montserrat({
   subsets: ['latin'],
@@ -37,9 +39,13 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${inter.variable} ${chewy.variable} antialiased selection:bg-orange-400 selection:text-neutral-700`}
       >
-        <Provider>
-          <StoreProvider>{children}</StoreProvider>
-        </Provider>
+        <AuthProvider>
+          <StoreProvider>
+            <InitAllFoods />
+            <InitAllUser />
+            {children}
+          </StoreProvider>
+        </AuthProvider>
       </body>
     </html>
   );
