@@ -28,10 +28,10 @@ export async function POST(req: NextRequest) {
     const name = formData.get('name') as string;
     const price = Number(formData.get('price'));
     const category = formData.get('category') as string;
-    const quantity = Number(formData.get('quantity'));
+    const type = formData.get('type') as string;
     const image = formData.get('image') as File | null;
 
-    if (!name || !image || !price || !category || !quantity) {
+    if (!name || !image || !price || !category) {
       return NextResponse.json(
         { success: false, message: 'All fields are required' },
         { status: 400 },
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       image: imageUrl,
       price,
       category,
-      quantity,
+      type,
     });
 
     return NextResponse.json({
