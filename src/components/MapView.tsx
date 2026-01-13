@@ -3,10 +3,11 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { useMap } from 'react-leaflet';
 
 const markerIcon = new L.Icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/128/14090/14090313.png',
-  iconSize: [32, 40],
+  iconSize: [32, 36],
   iconAnchor: [20, 40],
   popupAnchor: [1, -34],
 });
@@ -16,14 +17,19 @@ type MapViewProps = {
   setPosition?: (pos: [number, number]) => void;
 };
 export default function MapView({ position, setPosition }: MapViewProps) {
+  function ChangeView({ center }: { center: [number, number] }) {
+    const map = useMap();
+    map.setView(center);
+    return null;
+  }
   return (
     <MapContainer
-      key={`${position[0]}-${position[1]}`}
       center={position}
       zoom={15}
       scrollWheelZoom={true}
-      className="h-full w-full"
+      className="z-0 h-full w-full"
     >
+      <ChangeView center={position} />
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -39,7 +45,6 @@ export default function MapView({ position, setPosition }: MapViewProps) {
             if (setPosition) setPosition([newPos.lat, newPos.lng]);
           },
         }}
-        key={`${position[0]}-${position[1]}`}
       >
         <Popup>You are here</Popup>
       </Marker>
