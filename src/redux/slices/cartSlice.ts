@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { clear } from 'console';
 import mongoose from 'mongoose';
 
 interface CartItem {
@@ -46,10 +47,18 @@ export const cartSlice = createSlice({
     deleteFromCart: (state, action: PayloadAction<string>) => {
       state.cartData = state.cartData.filter((i) => i._id !== action.payload);
     },
+    clearCart: (state) => {
+      state.cartData = [];
+    },
   },
 });
 
-export const { addToCart, increaseQuantity, decreaseQuantity, deleteFromCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  increaseQuantity,
+  decreaseQuantity,
+  deleteFromCart,
+  clearCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
