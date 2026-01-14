@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import homeburger from '@/assets/homeburger.png';
 import homemomo from '@/assets/homemomo.png';
@@ -9,6 +10,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const images = [homeburger, homemomo, carouselmomo];
 
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { ease: 'easeOut' as const } },
+};
+
 export default function Hero() {
   const [index, setIndex] = useState(0);
 
@@ -16,20 +30,37 @@ export default function Hero() {
   const next = () => setIndex((i) => (i === images.length - 1 ? 0 : i + 1));
 
   return (
-    <section className="rounded-xl bg-zinc-800 text-white">
+    <motion.section
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      className="rounded-xl bg-zinc-800 text-white"
+    >
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 pt-10 pb-4 md:grid-cols-2 md:gap-12 lg:pb-16">
-        {/* Text */}
-        <div className="order-2 text-center md:order-1 md:text-left">
-          <h1 className="text-3xl leading-tight font-bold sm:text-4xl md:text-6xl">
+        {/* TEXT */}
+        <motion.div
+          variants={item}
+          className="order-2 text-center md:order-1 md:text-left"
+        >
+          <motion.h1
+            variants={item}
+            className="text-3xl leading-tight font-bold sm:text-4xl md:text-6xl"
+          >
             Order Your <span className="text-orange-400">Favorite</span> Foods
-          </h1>
+          </motion.h1>
 
-          <p className="mx-auto mt-5 max-w-md text-sm text-zinc-400 sm:text-base md:mx-0">
+          <motion.p
+            variants={item}
+            className="mx-auto mt-5 max-w-md text-sm text-zinc-400 sm:text-base md:mx-0"
+          >
             Fresh, delicious meals delivered fast — no nonsense, no delays.
-          </p>
+          </motion.p>
 
-          {/* Mobile carousel */}
-          <div className="mt-6 flex justify-center md:hidden">
+          {/* MOBILE CAROUSEL */}
+          <motion.div
+            variants={item}
+            className="mt-6 flex justify-center md:hidden"
+          >
             <div className="relative flex h-72 w-72 items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -62,28 +93,34 @@ export default function Hero() {
                 <ChevronLeft size={22} className="rotate-180" />
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* CTA */}
-          <div className="mt-7 flex flex-wrap justify-center gap-4 md:justify-start">
+          <motion.div
+            variants={item}
+            className="mt-7 flex flex-wrap justify-center gap-4 md:justify-start"
+          >
             <button className="rounded-3xl bg-orange-400 px-6 py-2 text-sm font-medium text-black hover:bg-orange-500">
               View Menu
             </button>
             <button className="rounded-3xl border border-zinc-500 px-6 py-2 text-sm text-zinc-200 hover:bg-zinc-700">
               Order Now
             </button>
-          </div>
+          </motion.div>
 
-          {/* Stats */}
-          <div className="mt-8">
+          {/* STATS */}
+          <motion.div variants={item} className="mt-8">
             <p className="text-xs text-zinc-400">4.9 / 5 ⭐</p>
             <p className="text-2xl font-bold">1000+</p>
             <p className="text-xs text-zinc-500">Reviews</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Desktop carousel */}
-        <div className="relative order-1 hidden justify-center md:flex">
+        {/* DESKTOP CAROUSEL */}
+        <motion.div
+          variants={item}
+          className="relative order-1 hidden justify-center md:flex"
+        >
           <div className="relative">
             <div className="relative flex h-72 w-72 items-center justify-center overflow-hidden sm:h-80 sm:w-80">
               <AnimatePresence mode="wait">
@@ -105,12 +142,12 @@ export default function Hero() {
               </AnimatePresence>
             </div>
 
-            {/* Badge */}
+            {/* BADGE */}
             <div className="absolute top-10 right-8 rounded-full bg-black/40 px-4 py-2 text-xs font-medium backdrop-blur-md">
               Fastest Delivery 🚚
             </div>
 
-            {/* Controls */}
+            {/* CONTROLS */}
             <button
               onClick={prev}
               className="absolute top-1/2 -left-4 -translate-y-1/2 rounded-full bg-zinc-700 p-2 hover:bg-zinc-600"
@@ -124,7 +161,7 @@ export default function Hero() {
               <ChevronLeft size={22} className="rotate-180" />
             </button>
 
-            {/* Product */}
+            {/* PRODUCT */}
             <div className="mt-4 text-center">
               <p className="text-sm text-zinc-400">Burger</p>
               <p className="text-xl font-bold">Rs. 100</p>
@@ -133,8 +170,8 @@ export default function Hero() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
