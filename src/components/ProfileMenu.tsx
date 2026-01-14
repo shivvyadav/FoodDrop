@@ -103,7 +103,10 @@ export default function ProfileMenu({ user }: { user: any }) {
                   Manage Account
                 </button>
                 {user?.role === 'user' && (
-                  <button className="flex items-center gap-2 px-4 py-1.5 hover:bg-zinc-100">
+                  <button
+                    className="flex items-center gap-2 px-4 py-1.5 hover:bg-zinc-100"
+                    onClick={() => router.push('/my-orders')}
+                  >
                     <ListOrdered size={16} /> My Orders
                   </button>
                 )}
