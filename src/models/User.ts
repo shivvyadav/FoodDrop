@@ -8,6 +8,10 @@ export interface IUser {
   contact?: number;
   role: 'admin' | 'user' | 'delivery';
   image?: string;
+  location?: {
+    type: string;
+    coordinates: number[];
+  };
   forgotPasswordToken?: String;
   forgotPasswordTokenExpiry?: Date;
   verifyToken?: String;
@@ -46,6 +50,17 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: '',
     },
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point',
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
     forgotPasswordToken: {
       type: String,
     },
@@ -61,6 +76,8 @@ const userSchema = new Schema<IUser>(
   },
   { timestamps: true },
 );
+
+userSchema.index({ location: '2dsphere' });
 
 const User = mongoose.models?.User || mongoose.model<IUser>('User', userSchema);
 export default User;
