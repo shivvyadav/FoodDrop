@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
-// import { sendEmail } from '@/lib/mailer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,12 +37,6 @@ export async function POST(request: NextRequest) {
       role,
       contact: Number(contact),
     });
-
-    // await sendEmail({
-    //   email,
-    //   emailType: 'VERIFY',
-    //   userId: newUser._id.toString(),
-    // });
 
     return NextResponse.json(
       { success: true, message: 'User registered successfully', newUser },
