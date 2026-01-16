@@ -23,6 +23,8 @@ export interface IOrder {
     latitude: number;
     longitude: number;
   };
+  assignment?: mongoose.Types.ObjectId | null;
+  assignedDeliveryBoy?: mongoose.Types.ObjectId | null;
   status: 'pending' | 'out for delivery' | 'delivered';
   createdAt?: Date;
   updatedAt?: Date;
@@ -65,6 +67,15 @@ const orderSchema = new mongoose.Schema<IOrder>(
       pincode: { type: String, required: false, default: '' },
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
+    },
+    assignment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeliveryAssignment',
+      default: null,
+    },
+    assignedDeliveryBoy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
     status: {
       type: String,
