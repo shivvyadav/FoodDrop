@@ -5,6 +5,7 @@ import {
   increaseQuantity,
   decreaseQuantity,
   deleteFromCart,
+  clearCart,
 } from '@/redux/slices/cartSlice';
 import { Minus, Plus, Trash2, ArrowRight, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -12,6 +13,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect } from 'react';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: 'easeOut' as const,
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export default function CartPage() {
   const router = useRouter();
@@ -26,25 +45,33 @@ export default function CartPage() {
   const delivery = cartData.length * 50;
   const total = Math.round(subtotal - discount + delivery);
 
+  useEffect(() => {}, [cartData]);
+
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="mx-auto max-w-5xl px-4 pt-6 pb-12 md:max-lg:px-36 lg:max-xl:px-20">
-        <div className="mb-4 flex items-center gap-3">
-          <Link
-            href="/home"
-            className="flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-neutral-800"
-          >
-            <ArrowLeft size={16} /> Back to Home
-          </Link>
-        </div>
-        <h1 className="mb-4 text-xl font-semibold">Your Cart</h1>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="mx-auto max-w-5xl px-4 md:max-lg:px-36 lg:max-xl:px-20"
+      >
+        <div className="border-border sticky top-0 z-40 mx-auto mb-6 border-b bg-neutral-50/0 py-5 backdrop-blur-lg">
+          <div className="flex items-center gap-18 sm:gap-8">
+            <Link
+              href="/home"
+              className="flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-neutral-800"
+            >
+              <ArrowLeft size={16} /> Back
+            </Link>
 
-        {/* EMPTY STATE */}
+            <h1 className="text-lg font-semibold">Your Cart</h1>
+          </div>
+        </div>
+
         {cartData.length === 0 && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex h-[50vh] flex-col items-center justify-center rounded-2xl bg-white text-center shadow-sm"
+            variants={itemVariants}
+            className="h-[50vh] rounded-2xl pt-8 text-center"
           >
             <p className="text-lg font-medium text-neutral-700">
               Your cart is empty
@@ -54,31 +81,26 @@ export default function CartPage() {
             </p>
           </motion.div>
         )}
-
         {cartData.length > 0 && (
           <div className="grid gap-8 lg:grid-cols-3">
-            {/* CART ITEMS */}
             <div className="space-y-4 lg:col-span-2">
               <AnimatePresence>
                 {cartData.map((item) => (
                   <motion.div
                     key={item._id.toString()}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0, x: -50 }}
+                    variants={itemVariants}
+                    exit={{ opacity: 0, x: -40 }}
                     transition={{ duration: 0.25 }}
                     className="flex items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-sm"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="rounded-lg bg-neutral-100">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={100}
-                          height={100}
-                          className="h-20 w-20 rounded-xl object-cover transition-transform duration-300 hover:scale-102"
-                        />
-                      </div>
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                        className="h-20 w-20 rounded-xl object-cover"
+                      />
                       <div>
                         <p className="font-medium text-neutral-700">
                           {item.name}
@@ -86,7 +108,7 @@ export default function CartPage() {
                         <p className="my-1 text-xs text-neutral-500">
                           {item.type}
                         </p>
-                        <p className="mt-1 font-semibold text-neutral-800">
+                        <p className="font-semibold text-neutral-800">
                           Rs. {item.price * item.quantity}
                         </p>
                       </div>
@@ -114,6 +136,7 @@ export default function CartPage() {
                           <Plus size={14} />
                         </button>
                       </div>
+
                       <button
                         onClick={() =>
                           dispatch(deleteFromCart(item._id.toString()))
@@ -130,13 +153,12 @@ export default function CartPage() {
 
             {/* SUMMARY */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              variants={itemVariants}
               className="border-border h-fit rounded-2xl border bg-white p-5 sm:p-6 lg:sticky lg:top-6"
             >
               <h2 className="text-lg font-semibold">Order Summary</h2>
 
-              <div className="mt-4 space-y-3 rounded-lg text-sm">
+              <div className="mt-4 space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-neutral-500">Subtotal</span>
                   <span className="font-medium">Rs. {subtotal}</span>
@@ -159,19 +181,15 @@ export default function CartPage() {
               </div>
 
               <motion.button
+                whileTap={{ scale: 0.98 }}
                 onClick={() => router.push('/checkout')}
-                whileTap={{ scale: 0.99 }}
-                transition={{ duration: 0.35, type: 'spring', stiffness: 400 }}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-black py-2.5 font-medium text-white"
+                className="bg-primary mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-2.5 font-medium text-white hover:bg-orange-600"
               >
                 Go to Checkout <ArrowRight size={16} />
               </motion.button>
+
               <button
-                onClick={() =>
-                  cartData.forEach((item) =>
-                    dispatch(deleteFromCart(item._id.toString())),
-                  )
-                }
+                onClick={() => dispatch(clearCart())}
                 className="mt-3 w-full text-center text-sm font-medium text-red-500 hover:text-red-600"
               >
                 Clear Cart
@@ -179,7 +197,7 @@ export default function CartPage() {
             </motion.div>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

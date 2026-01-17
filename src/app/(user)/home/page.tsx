@@ -1,9 +1,6 @@
 import UserNav from '@/components/user/UserNav';
 import Hero from '@/components/user/Hero';
 import CategorySlider from '@/components/user/CategorySlider';
-// import connectDB from '@/lib/db';
-// import Food from '@/models/Food';
-
 import FoodGrid from '@/components/user/food/FoodGrid';
 
 export default async function page() {
