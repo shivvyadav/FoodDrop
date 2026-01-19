@@ -12,6 +12,8 @@ export interface IUser {
     type: string;
     coordinates: number[];
   };
+  socketId?: string | null;
+  isOnline?: boolean;
   forgotPasswordToken?: String;
   forgotPasswordTokenExpiry?: Date;
   verifyToken?: String;
@@ -60,6 +62,14 @@ const userSchema = new Schema<IUser>(
         type: [Number],
         default: [0, 0],
       },
+    },
+    socketId: {
+      type: String,
+      default: null,
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
     },
     forgotPasswordToken: {
       type: String,
