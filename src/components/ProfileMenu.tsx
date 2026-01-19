@@ -67,10 +67,10 @@ export default function ProfileMenu({ user }: { user: any }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="border-border absolute top-14 -right-2.5 flex w-52 items-center justify-center rounded-xl border bg-white/40 py-2 text-black shadow-2xl backdrop-blur-2xl md:top-17"
+            className="border-border absolute top-14 -right-2.5 flex w-50 items-center justify-center rounded-xl border bg-white/40 py-2 text-black shadow-2xl backdrop-blur-2xl md:top-17"
           >
             <div className="flex w-full flex-col items-center gap-2 py-2">
-              <div className="border-border relative flex size-18 items-center justify-center rounded-full border bg-white">
+              <div className="border-border relative flex size-18 items-center justify-center overflow-hidden rounded-full border bg-white">
                 {userData?.image ? (
                   <Image
                     src={userData.image}
@@ -86,7 +86,7 @@ export default function ProfileMenu({ user }: { user: any }) {
                 )}
               </div>
               <h2 className="text-lg font-semibold text-neutral-800">
-                Hi, {user?.username}
+                Hi, {user?.username.split(' ')[0]}
               </h2>
               <div className="flex w-full flex-col gap-1 text-sm font-medium text-neutral-800">
                 <button
