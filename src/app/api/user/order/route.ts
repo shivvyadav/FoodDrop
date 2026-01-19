@@ -1,6 +1,7 @@
 import connectDB from '@/lib/db';
 import Order from '@/models/Order';
 import User from '@/models/User';
+import emitEventHandler from '@/lib/emitEventHandler';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -28,6 +29,8 @@ export async function POST(req: NextRequest) {
       paymentMethod,
       address,
     });
+
+    await emitEventHandler('orderCreated', newOrder);
     return NextResponse.json(
       { success: true, message: 'Order created successfully', order: newOrder },
       { status: 200 },
