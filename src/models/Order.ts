@@ -6,6 +6,8 @@ export interface IOrder {
   items: [
     {
       foodId: mongoose.Types.ObjectId;
+      name: string;
+      image: string;
       quantity: number;
       price: number;
     },
@@ -44,6 +46,8 @@ const orderSchema = new mongoose.Schema<IOrder>(
           ref: 'Food',
           required: true,
         },
+        name: { type: String, required: true },
+        image: { type: String, required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
       },
