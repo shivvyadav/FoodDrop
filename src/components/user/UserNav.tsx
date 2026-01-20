@@ -4,12 +4,14 @@ import ProfileMenu from '../ProfileMenu';
 import { auth } from '@/auth';
 import { IconBoltFilled } from '@tabler/icons-react';
 import UserNavAnimated from './UserNavAnimated';
+import GeoLocationUpdater from '../GeoLocationUpdater';
 
 export default async function UserNav() {
   const session = await auth();
 
   return (
     <UserNavAnimated>
+      <GeoLocationUpdater userId={session?.user.id} />
       <div className="relative flex justify-center">
         <div className="fixed inset-0 top-0 z-40 mx-auto h-8 w-[92%] bg-white/0 backdrop-blur-lg md:w-[88%]" />
 
