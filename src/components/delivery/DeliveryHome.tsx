@@ -7,11 +7,16 @@ import { IDeliveryAssignment } from '@/models/DeliveryAssignment';
 import { CheckCircle, MapPin, Phone, User, XCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import LiveMapTracking from '../LiveMapTracking';
 
 export default function DeliveryHome() {
   const [assignments, setAssignments] = useState<IDeliveryAssignment[]>([]);
   const [activeAssignment, setActiveAssignment] = useState<any>();
   const { userData } = useSelector((state: RootState) => state.user);
+  const [userLocation, setUserLocation] = useState<[number, number]>([0, 0]);
+  const [deliveryBoyLocation, setDeliveryBoyLocation] = useState<
+    [number, number]
+  >([0, 0]);
 
   async function fetchAssignment() {
     try {
@@ -28,6 +33,10 @@ export default function DeliveryHome() {
       console.log(res.data);
       if (res.data.success) {
         setActiveAssignment(res.data.activeAssignment);
+        setUserLocation([
+          res.data.activeAssignment.address?.latitude,
+          res.data.activeAssignment.address?.longitude,
+        ]);
       }
     } catch (error) {
       console.log(error);
@@ -44,6 +53,30 @@ export default function DeliveryHome() {
 
     return () => socket.off('newAssignment');
   }, []);
+
+  useEffect(() => {
+    if (!userData?._id) return;
+
+    const socket = connectWS();
+    socket.emit('identity', userData?._id);
+
+    if (!navigator.geolocation) return;
+
+    const watcher = navigator.geolocation.watchPosition(
+      (pos) => {
+        setDeliveryBoyLocation([pos.coords.latitude, pos.coords.longitude]);
+        socket.emit('updateLocation', {
+          userId: userData?._id,
+          lat: pos.coords.latitude,
+          long: pos.coords.longitude,
+        });
+      },
+      console.error,
+      { enableHighAccuracy: true },
+    );
+
+    return () => navigator.geolocation.clearWatch(watcher);
+  }, [userData?._id]);
 
   useEffect(() => {
     fetchAssignment();
@@ -66,6 +99,12 @@ export default function DeliveryHome() {
       <div className="h-screen px-4 py-20">
         <div className="mx-auto max-w-xl space-y-4 bg-neutral-500">
           <h1 className="ml-1 text-lg font-semibold">Current Delivery</h1>
+          <div className="border-border relative h-88 overflow-hidden rounded-2xl border bg-neutral-100 p-2">
+            <LiveMapTracking
+              userLocation={userLocation}
+              deliveryBoyLocation={deliveryBoyLocation}
+            />
+          </div>
         </div>
       </div>
     );
