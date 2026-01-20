@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import homeburger from '@/assets/homeburger.png';
 import homemomo from '@/assets/homemomo.png';
 import carouselmomo from '@/assets/carouselmomo.png';
