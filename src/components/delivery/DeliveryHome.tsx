@@ -8,6 +8,7 @@ import { CheckCircle, MapPin, Phone, User, XCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import LiveMapTracking from '../LiveMapTracking';
+import ChatMessageBox from '../ChatMessageBox';
 
 export default function DeliveryHome() {
   const [assignments, setAssignments] = useState<IDeliveryAssignment[]>([]);
@@ -96,16 +97,25 @@ export default function DeliveryHome() {
 
   if (activeAssignment) {
     return (
-      <div className="h-screen px-4 py-20">
-        <div className="mx-auto max-w-xl space-y-4 bg-neutral-500">
+      <div className="min-h-screen bg-gray-50 px-3 pt-20 pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mx-auto w-full max-w-xl"
+        >
           <h1 className="ml-1 text-lg font-semibold">Current Delivery</h1>
-          <div className="border-border relative h-88 overflow-hidden rounded-2xl border bg-neutral-100 p-2">
+          <div className="border-border relative h-80 overflow-hidden rounded-2xl border bg-neutral-100 p-2">
             <LiveMapTracking
               userLocation={userLocation}
               deliveryBoyLocation={deliveryBoyLocation}
             />
           </div>
-        </div>
+          <ChatMessageBox
+            orderId={activeAssignment?._id.toString()}
+            currentUserId={userData?._id?.toString()!}
+          />
+        </motion.div>
       </div>
     );
   }
