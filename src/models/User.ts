@@ -14,10 +14,8 @@ export interface IUser {
   };
   socketId?: string | null;
   isOnline?: boolean;
-  forgotPasswordToken?: String;
-  forgotPasswordTokenExpiry?: Date;
-  verifyToken?: String;
-  verifyTokenExpiry?: Date;
+  verifyCode?: String;
+  verifyCodeExpiry?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -71,16 +69,10 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
-    forgotPasswordToken: {
+    verifyCode: {
       type: String,
     },
-    forgotPasswordTokenExpiry: {
-      type: Date,
-    },
-    verifyToken: {
-      type: String,
-    },
-    verifyTokenExpiry: {
+    verifyCodeExpiry: {
       type: Date,
     },
   },
