@@ -1,7 +1,9 @@
 import { auth } from '@/auth';
 import connectDB from '@/lib/db';
+import emitEventHandler from '@/lib/emitEventHandler';
 import DeliveryAssignment from '@/models/DeliveryAssignment';
 import Order from '@/models/Order';
+import User from '@/models/User';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -72,20 +74,41 @@ export async function GET(
     order.assignedDeliveryBoy = session.user.id;
     await order.save();
 
-    // pull delivery boy from other assignments
-    await DeliveryAssignment.updateMany(
-      {
-        _id: { $ne: assignment._id },
-        broadcastTo: session.user.id,
-        status: 'broadcasted',
+    const deliveryBoy = await User.findById(session.user.id).lean();
+    if (!deliveryBoy) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Delivery boy not found',
+        },
+        { status: 404 },
+      );
+    }
+
+    await emitEventHandler('orderAccepted', {
+      orderId: order._id,
+      assignedDeliveryBoy: {
+        _id: deliveryBoy._id,
+        username: deliveryBoy.username,
+        contact: deliveryBoy.contact,
       },
-      { $pull: { broadcastTo: session.user.id } },
-    );
+    });
+
+    // pull delivery boy from other assignments
+    // await DeliveryAssignment.updateMany(
+    //   {
+    //     _id: { $ne: assignment._id },
+    //     broadcastTo: session.user.id,
+    //     status: 'broadcasted',
+    //   },
+    //   { $pull: { broadcastTo: session.user.id } },
+    // );
 
     return NextResponse.json(
       {
         success: true,
         message: 'Order accepted successfully',
+        order,
       },
       { status: 200 },
     );
