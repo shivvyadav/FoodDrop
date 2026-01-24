@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { ChevronDown, User, Phone, MapPin } from 'lucide-react';
+import { ChevronDown, User, Phone, MapPin, PhoneCall } from 'lucide-react';
 import { useState } from 'react';
 import { IOrder } from '@/models/Order';
 
@@ -13,10 +13,8 @@ interface Props {
 
 export default function ManageSingleOrder({ order, onStatusChange }: Props) {
   const [expanded, setExpanded] = useState(false);
-  const [status, setStatus] = useState<string>(order.status);
 
   const handleStatusChange = (newStatus: string) => {
-    setStatus(newStatus);
     onStatusChange(order._id!.toString(), newStatus);
   };
 
@@ -49,17 +47,17 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
 
             <span
               className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                status === 'pending'
+                order.status === 'pending'
                   ? 'bg-red-100 text-red-700'
                   : 'bg-blue-100 text-blue-700'
               }`}
             >
-              {status}
+              {order.status}
             </span>
           </div>
 
           <select
-            value={status}
+            value={order.status}
             onChange={(e) => handleStatusChange(e.target.value)}
             className="border-border rounded-lg border bg-neutral-50 px-2 py-1 text-[12px] font-medium outline-none"
           >
@@ -69,7 +67,6 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
         </div>
       </div>
 
-      {/* User & Address */}
       <div className="mt-3 space-y-2 text-[13px] text-neutral-600">
         <div className="flex items-center gap-2">
           <User size={14} />
@@ -85,7 +82,6 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
         </div>
       </div>
 
-      {/* Toggle */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="mt-3 flex items-center gap-1 text-[13px] font-medium text-neutral-600"
@@ -97,7 +93,6 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
         />
       </button>
 
-      {/* Items */}
       <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
@@ -111,8 +106,8 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
                 <div className="relative h-11 w-11 rounded-md bg-neutral-200">
                   {item?.image && (
                     <Image
-                      src={item?.image}
-                      alt={item?.name}
+                      src={item.image}
+                      alt={item.name}
                       fill
                       sizes="100%"
                       className="object-contain"
@@ -120,7 +115,7 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{item?.name}</p>
+                  <p className="text-sm font-medium">{item.name}</p>
                   <p className="text-xs text-neutral-500">
                     Qty: {item.quantity}
                   </p>
@@ -132,19 +127,19 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
         )}
       </AnimatePresence>
 
-      {order?.assignedDeliveryBoy &&
+      {order.assignedDeliveryBoy &&
         typeof order.assignedDeliveryBoy === 'object' &&
         'username' in order.assignedDeliveryBoy && (
           <div className="border-border my-2 flex items-center justify-between rounded-xl border bg-blue-50 p-2">
             <div className="text-[13px] font-medium text-neutral-700">
-              <p>assigned to: {(order.assignedDeliveryBoy as any)?.username}</p>
-              <p>contact: {(order.assignedDeliveryBoy as any)?.contact}</p>
+              <p>assigned to: {(order.assignedDeliveryBoy as any).username}</p>
+              <p>contact: {(order.assignedDeliveryBoy as any).contact}</p>
             </div>
             <div className="rounded-md bg-white p-2">
               <a
-                href={`tel:+977-${(order.assignedDeliveryBoy as any)?.contact}`}
+                href={`tel:+977-${(order.assignedDeliveryBoy as any).contact}`}
               >
-                📞
+                <Phone size={20} className="text-primary" />
               </a>
             </div>
           </div>
