@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     if (!activeAssignment) {
       return NextResponse.json(
         { success: false, message: 'No orders found' },
-        { status: 404 },
+        { status: 200 },
       );
     }
 
