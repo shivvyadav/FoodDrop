@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { clear } from 'console';
 import mongoose from 'mongoose';
 
 interface CartItem {
@@ -24,16 +23,16 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<CartItem>) => {
+    addToCart: (state, action) => {
       state.cartData.push(action.payload);
     },
 
-    increaseQuantity: (state, action: PayloadAction<string>) => {
+    increaseQuantity: (state, action) => {
       const item = state.cartData.find((i) => i._id === action.payload);
       if (item) item.quantity += 1;
     },
 
-    decreaseQuantity: (state, action: PayloadAction<string>) => {
+    decreaseQuantity: (state, action) => {
       const item = state.cartData.find((i) => i._id === action.payload);
       if (!item) return;
 
@@ -44,7 +43,7 @@ export const cartSlice = createSlice({
       }
     },
 
-    deleteFromCart: (state, action: PayloadAction<string>) => {
+    deleteFromCart: (state, action) => {
       state.cartData = state.cartData.filter((i) => i._id !== action.payload);
     },
     clearCart: (state) => {
