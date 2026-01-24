@@ -87,7 +87,7 @@ export default function ChatMessageBox({ orderId, currentUserId }: Props) {
         transition={{ duration: 0.25, ease: 'easeOut' }}
         className="border-border mt-4 rounded-2xl border bg-white p-2 md:p-4"
       >
-        <div className="hide-scrollbar mb-3 h-48 space-y-2 overflow-y-auto rounded-lg bg-neutral-50 p-1 text-[13px]">
+        <div className="hide-scrollbar mb-3 h-52 space-y-2 overflow-y-auto rounded-lg bg-neutral-50 p-1 text-[13px]">
           {messages.map((msg, i) => {
             const mine = msg.senderId === currentUserId;
             return (
@@ -106,10 +106,10 @@ export default function ChatMessageBox({ orderId, currentUserId }: Props) {
                     {formatTime12h(msg.time)}
                   </p>
                 </div>
+                <div ref={bottomRef} />
               </motion.div>
             );
           })}
-          <div ref={bottomRef} />
         </div>
 
         <div className="flex gap-2">
