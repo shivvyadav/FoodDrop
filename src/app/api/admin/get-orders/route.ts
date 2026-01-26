@@ -16,10 +16,6 @@ export async function GET(req: NextRequest) {
 
     const orders = await Order.find({})
       .populate({
-        path: 'items.foodId',
-        select: '_id name image price category type',
-      })
-      .populate({
         path: 'assignedDeliveryBoy',
         select: 'username contact ',
       })
