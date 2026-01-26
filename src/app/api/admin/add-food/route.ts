@@ -51,12 +51,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Food added successfully',
-      data: newFood,
+      newFood,
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { success: false, message: 'Internal server error' },
+      { success: false, message: 'Error adding food' },
       { status: 500 },
     );
   }
