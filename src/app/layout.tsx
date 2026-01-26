@@ -3,8 +3,9 @@ import { Montserrat, Inter, Chewy, Chela_One } from 'next/font/google';
 import './globals.css';
 import AuthProvider from '@/components/AuthProvider';
 import StoreProvider from '@/redux/StoreProvider';
-import InitAllUser from '@/InitAllUser';
-import InitAllFoods from '@/InitAllFoods';
+import InitAllUser from '@/Init/InitAllUser';
+import InitAllFoods from '@/Init/InitAllFoods';
+import { Toaster } from 'react-hot-toast';
 
 export const montserrat = Montserrat({
   subsets: ['latin'],
@@ -44,6 +45,15 @@ export default function RootLayout({
             <InitAllFoods />
             <InitAllUser />
             {children}
+            <Toaster
+              toastOptions={{
+                duration: 2000,
+                style: {
+                  border: '1px solid #c4c4c4',
+                  padding: '5px 8px',
+                },
+              }}
+            />
           </StoreProvider>
         </AuthProvider>
       </body>
