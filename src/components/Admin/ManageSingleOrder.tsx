@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { ChevronDown, User, Phone, MapPin, PhoneCall } from 'lucide-react';
+import { ChevronDown, User, Phone, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { IOrder } from '@/models/Order';
 
@@ -20,7 +20,6 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
 
   return (
     <div className="border-border mb-4 rounded-xl border bg-white px-4 py-3 shadow-sm">
-      {/* Header */}
       <div className="border-border flex items-start justify-between gap-3 border-b pb-3">
         <div className="space-y-1">
           <p className="text-sm font-semibold">
@@ -47,23 +46,27 @@ export default function ManageSingleOrder({ order, onStatusChange }: Props) {
 
             <span
               className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                order.status === 'pending'
-                  ? 'bg-red-100 text-red-700'
-                  : 'bg-blue-100 text-blue-700'
+                order.status === 'delivered'
+                  ? 'bg-green-100 text-green-700'
+                  : order.status === 'pending'
+                    ? 'bg-red-100 text-red-700'
+                    : 'bg-blue-100 text-blue-700'
               }`}
             >
               {order.status}
             </span>
           </div>
 
-          <select
-            value={order.status}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            className="border-border rounded-lg border bg-neutral-50 px-2 py-1 text-[12px] font-medium outline-none"
-          >
-            <option value="pending">pending</option>
-            <option value="out for delivery">out for delivery</option>
-          </select>
+          {order.status !== 'delivered' && (
+            <select
+              value={order.status}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="border-border rounded-lg border bg-neutral-50 px-2 py-1 text-[12px] font-medium outline-none"
+            >
+              <option value="pending">pending</option>
+              <option value="out for delivery">out for delivery</option>
+            </select>
+          )}
         </div>
       </div>
 
