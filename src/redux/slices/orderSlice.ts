@@ -79,6 +79,16 @@ export const orderSlice = createSlice({
         order.assignedDeliveryBoy = assignedDeliveryBoy._id;
       }
     },
+    updateOrder(state, action) {
+      const { orderId, status, isPaid } = action.payload;
+
+      const order = state.orderData.find((o) => o._id?.toString() === orderId);
+
+      if (order) {
+        order.status = status;
+        order.isPaid = isPaid;
+      }
+    },
   },
 });
 
@@ -86,6 +96,7 @@ export const {
   setOrderData,
   prependOrder,
   updateOrderStatus,
+  updateOrder,
   updateAssignedDeliveryBoy,
 } = orderSlice.actions;
 export default orderSlice.reducer;
