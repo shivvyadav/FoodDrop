@@ -5,7 +5,6 @@ import axios from 'axios';
 import { AnimatePresence, motion } from 'motion/react';
 import { connectWS } from '@/lib/socket';
 import {
-  Bike,
   CheckCircle,
   Hash,
   Loader,
@@ -20,7 +19,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/redux/store';
 import {
-  addAssignment,
+  clearActiveAssignment,
   setActiveAssignment,
 } from '@/redux/slices/deliverySlice';
 const LiveMapTracking = dynamic(() => import('@/components/LiveMapTracking'), {
@@ -29,7 +28,7 @@ const LiveMapTracking = dynamic(() => import('@/components/LiveMapTracking'), {
 import ChatMessageBox from '../ChatMessageBox';
 import dynamic from 'next/dynamic';
 import OtpVerification from './OtpVerification';
-import { s } from 'motion/react-client';
+import toast from 'react-hot-toast';
 
 export default function DeliveryHome() {
   const { userData } = useSelector((state: RootState) => state.user);
@@ -110,25 +109,36 @@ export default function DeliveryHome() {
 
   const handleMarkAsDelivered = async () => {
     if (!activeAssignment) return;
-    setLoading(true);
+    setOtpVisible(true);
     try {
-      const res = await axios.post('/api/otp/send-otp', {
+      await axios.post('/api/otp/send-otp', {
         userId: activeAssignment.userId.toString(),
       });
-      if (res.data.success) {
-        setOtpVisible(true);
-      }
     } catch (err) {
       console.error(err);
-    } finally {
-      setLoading(false);
     }
   };
 
   // OTP verification callback
-  const handleVerifyOtp = (otp: string) => {
+  const handleVerifyOtp = async (otp: string) => {
     console.log('OTP entered:', otp);
-    setOtpVisible(false);
+
+    try {
+      const res = await axios.post('/api/otp/verify-otp', {
+        userId: activeAssignment.userId.toString(),
+        verifyCode: otp,
+        orderId: activeAssignment._id,
+      });
+
+      if (res.data.success) {
+        toast.success('Order Delivered ');
+        setOtpVisible(false);
+        dispatch(clearActiveAssignment());
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Invalid OTP');
+    }
   };
 
   // Resend OTP
@@ -277,14 +287,14 @@ export default function DeliveryHome() {
                   <p className="mb-4 text-center text-sm font-medium">
                     Are you sure you want to mark this order as delivered?
                   </p>
-                  <div
-                    onClick={() => {
-                      handleMarkAsDelivered();
-                      setShowConfirm(false);
-                    }}
-                    className="flex gap-3"
-                  >
-                    <button className="bg-primary flex-1 rounded-lg px-3 py-2 text-sm font-semibold text-white hover:bg-orange-600">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => {
+                        handleMarkAsDelivered();
+                        setShowConfirm(false);
+                      }}
+                      className="bg-primary flex-1 rounded-lg px-3 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                    >
                       Yes
                     </button>
                     <button
