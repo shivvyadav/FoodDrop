@@ -7,6 +7,7 @@ import { connectWS } from '@/lib/socket';
 import {
   prependOrder,
   updateAssignedDeliveryBoy,
+  updateOrder,
 } from '@/redux/slices/allOrderSlice';
 
 export default function useUserSocket() {
@@ -26,9 +27,14 @@ export default function useUserSocket() {
       dispatch(updateAssignedDeliveryBoy(data));
     });
 
+    socket.on('orderDelivered', (data) => {
+      dispatch(updateOrder(data));
+    });
+
     return () => {
       socket.off('orderCreated');
       socket.off('orderAccepted');
+      socket.off('orderDelivered');
     };
   }, [userId, dispatch]);
 }
