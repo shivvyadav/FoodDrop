@@ -3,9 +3,8 @@
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IOrder } from '@/models/Order';
-import { connectWS } from '@/lib/socket';
 import Link from 'next/link';
 
 export default function OrderCard({
@@ -16,24 +15,9 @@ export default function OrderCard({
   foodData: any[];
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [status, setStatus] = useState<string>(order.status);
-
-  useEffect((): any => {
-    const socket = connectWS();
-    if (!socket) return;
-
-    socket.on('orderStatusUpdated', (data) => {
-      if (data.orderId === order._id) {
-        setStatus(data.status);
-      }
-    });
-
-    return () => socket.off('orderStatusUpdated');
-  }, []);
 
   return (
     <div className="border-border mb-4 rounded-xl border bg-white px-4 py-3 shadow-sm">
-      {/* Header */}
       <div className="border-border flex items-center justify-between border-b pb-3">
         <div>
           <h1 className="text-sm font-semibold">
@@ -62,28 +46,28 @@ export default function OrderCard({
             </span>
             <span
               className={`rounded-full ${
-                status === 'delivered'
+                order.status === 'delivered'
                   ? 'bg-green-100 text-green-700'
-                  : status === 'pending'
+                  : order.status === 'pending'
                     ? 'bg-red-100 text-red-700'
                     : 'bg-blue-100 text-blue-700'
               } px-2 py-0.5 text-[11px] font-medium`}
             >
-              {status}
+              {order.status}
             </span>
           </div>
-          {order?.assignedDeliveryBoy && (
-            <Link
-              href={`/track-order/${order._id}`}
-              className="flex items-center gap-1 text-[13px] font-medium text-neutral-800 underline underline-offset-2"
-            >
-              track order <ArrowRight size={16} />
-            </Link>
-          )}
+          {order?.assignedDeliveryBoy &&
+            order.status === 'out for delivery' && (
+              <Link
+                href={`/track-order/${order._id}`}
+                className="flex items-center gap-1 text-[13px] font-medium text-neutral-800 underline underline-offset-2"
+              >
+                track order <ArrowRight size={16} />
+              </Link>
+            )}
         </div>
       </div>
 
-      {/* Toggle */}
       <button
         onClick={() => setExpanded((p) => !p)}
         className="mt-3 flex items-center gap-1 text-[13px] font-medium text-neutral-600 hover:text-neutral-800"
@@ -95,7 +79,6 @@ export default function OrderCard({
         />
       </button>
 
-      {/* Items */}
       <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
@@ -148,7 +131,6 @@ export default function OrderCard({
         )}
       </AnimatePresence>
 
-      {/* Footer */}
       <motion.div
         initial={{ opacity: 0, x: 12 }}
         animate={{ opacity: 1, x: 0 }}
