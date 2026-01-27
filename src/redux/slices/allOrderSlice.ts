@@ -43,8 +43,15 @@ const allOrderSlice = createSlice({
       }
     },
 
-    clearAllOrders() {
-      return initialState;
+    updateOrder(state, action) {
+      const { orderId, status, isPaid } = action.payload;
+
+      const order = state.orders.find((o) => o._id?.toString() === orderId);
+
+      if (order) {
+        order.status = status;
+        order.isPaid = isPaid;
+      }
     },
   },
 });
@@ -53,7 +60,7 @@ export const {
   setAllOrders,
   prependOrder,
   updateOrderStatus,
-  clearAllOrders,
+  updateOrder,
   updateAssignedDeliveryBoy,
 } = allOrderSlice.actions;
 
