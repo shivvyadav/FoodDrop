@@ -26,7 +26,7 @@ export const sendEmail = async ({ toEmail, subject, code }: mailProps) => {
       <div style="max-width:480px; margin:0 auto; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
         
         <h2 style="margin:0 0 12px; color:#111827; text-align:center; font-size:20px;">
-          Verify your email
+          Verify your code
         </h2>
 
         <p style="margin:0 0 16px; color:#374151; text-align:center; font-size:14px; line-height:1.5;">
