@@ -38,7 +38,7 @@ export default function OtpVerification({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [visible, resendEnabled]);
+  }, [visible]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
