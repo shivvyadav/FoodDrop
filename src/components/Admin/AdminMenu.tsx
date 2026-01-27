@@ -1,11 +1,10 @@
 'use client';
 
-import { Menu, X } from 'lucide-react';
+import { Menu, X, SquarePen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
-import { SquarePen } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 
 const MENU = [
@@ -17,10 +16,8 @@ const MENU = [
 
 export default function AdminMenu({ user }: { user: any }) {
   const pathname = usePathname();
-
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(pathname);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const baseBtn =
     'rounded-lg border border-border px-4 py-2 text-left transition-colors text-sm';
@@ -28,21 +25,24 @@ export default function AdminMenu({ user }: { user: any }) {
   const inactiveBtn = 'bg-neutral-50 hover:bg-neutral-100';
 
   const renderButtons = (isMobile = false) =>
-    MENU.map((item) => (
-      <button
-        key={item.label}
-        onClick={() => {
-          setActive(item.link);
-          if (isMobile) setOpen(false);
-          router.push(item.link);
-        }}
-        className={`${baseBtn} ${
-          active === item.link ? activeBtn : inactiveBtn
-        } ${isMobile ? 'py-2' : ''}`}
-      >
-        {item.label}
-      </button>
-    ));
+    MENU.map((item) => {
+      const isActive = pathname === item.link;
+
+      return (
+        <button
+          key={item.label}
+          onClick={() => {
+            if (isMobile) setOpen(false);
+            router.push(item.link);
+          }}
+          className={`${baseBtn} ${
+            isActive ? activeBtn : inactiveBtn
+          } ${isMobile ? 'py-2' : ''}`}
+        >
+          {item.label}
+        </button>
+      );
+    });
 
   return (
     <div className="text-black">
@@ -82,18 +82,19 @@ export default function AdminMenu({ user }: { user: any }) {
                   className="size-6 text-neutral-800"
                 />
               </div>
-              <div className="relative mb-4 flex items-start gap-2 rounded-lg border border-neutral-200 px-2 py-2 transition-colors">
+
+              <div className="relative mb-4 flex items-start gap-2 rounded-lg border border-neutral-200 px-2 py-2">
                 <div className="flex size-12 items-center justify-center rounded-full border border-neutral-200 text-xl font-medium">
                   {user?.image ? (
                     <Image
-                      src={user?.image}
+                      src={user.image}
                       alt="profile"
-                      width={100}
-                      height={100}
+                      width={48}
+                      height={48}
                       className="rounded-full"
                     />
                   ) : (
-                    <span>{user?.username[0].toUpperCase()}</span>
+                    <span>{user?.username?.[0]?.toUpperCase()}</span>
                   )}
                 </div>
                 <div className="flex flex-col justify-center">
@@ -102,7 +103,10 @@ export default function AdminMenu({ user }: { user: any }) {
                   </p>
                   <span className="text-xs text-neutral-500">admin</span>
                 </div>
-                <SquarePen className="absolute top-1 right-1 size-4.5 text-neutral-700" />
+                <SquarePen
+                  onClick={() => router.push('/edit-profile')}
+                  className="absolute top-1 right-1 size-4.5 text-neutral-700"
+                />
               </div>
 
               <div className="flex flex-1 flex-col gap-3">
