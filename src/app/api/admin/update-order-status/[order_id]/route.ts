@@ -2,7 +2,7 @@ import connectDB from '@/lib/db';
 import emitEventHandler from '@/lib/emitEventHandler';
 import DeliveryAssignment from '@/models/DeliveryAssignment';
 import Order from '@/models/Order';
-import User, { IUser } from '@/models/User';
+import User from '@/models/User';
 import { NextRequest, NextResponse } from 'next/server';
 export async function POST(
   req: NextRequest,
@@ -22,10 +22,6 @@ export async function POST(
         { status: 404 },
       );
     }
-    order.status = status;
-    await order.save();
-
-    let availableDeliveryBoysData: any = [];
 
     // check if order is out for delivery and delivery boy is not assigned
     if (status === 'out for delivery' && !order.assignment) {
@@ -53,21 +49,20 @@ export async function POST(
       }).distinct('assignedTo');
 
       const busySet = new Set(busyIds.map(String));
+
       // filter out busy delivery boys
       const available = nearByDeliveryBoys.filter(
         (b) => !busySet.has(String(b._id)),
       );
+
       // if no delivery boy is available
       if (!available.length) {
-        await emitEventHandler('orderStatusUpdated', {
-          orderId: order._id,
-          status: order.status,
-        });
         return NextResponse.json(
-          { success: true, message: 'No delivery boy available' },
+          { success: false, message: 'No delivery boy' },
           { status: 200 },
         );
       }
+
       // create assignment
       const assignment = await DeliveryAssignment.create({
         orderId: order._id,
@@ -86,19 +81,9 @@ export async function POST(
       }
 
       order.assignment = assignment._id;
-
-      // get available delivery boys
-      availableDeliveryBoysData = available.map((b) => ({
-        name: b.username,
-        contact: b.contact,
-        image: b.image,
-        latitude: b.location.coordinates[1],
-        longitude: b.location.coordinates[0],
-      }));
     }
-
+    order.status = status;
     await order.save();
-    await order.populate('userId');
 
     // emit event
     await emitEventHandler('orderStatusUpdated', {
@@ -108,9 +93,7 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: 'Order status updated successfully',
-      order,
-      availableDeliveryBoysData,
+      message: 'Order status updated',
     });
   } catch {
     return NextResponse.json(
