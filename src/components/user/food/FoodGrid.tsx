@@ -1,10 +1,12 @@
 'use client';
 import { useSelector } from 'react-redux';
 import FoodCard, { Food } from './FoodCard';
+import { IFood } from '@/models/Food';
 
-const FoodGrid = () => {
+const FoodGrid = ({ searchedFoods }: { searchedFoods: IFood[] }) => {
   const { foodData } = useSelector((state: any) => state.food);
-  const foods: Food[] = foodData;
+  const foods: Food[] = searchedFoods.length ? searchedFoods : foodData;
+
   if (!foods.length) {
     return (
       <p className="text-center text-neutral-500">No food items available</p>
