@@ -8,6 +8,7 @@ import { LoaderCircle, ArrowLeft, Camera } from 'lucide-react';
 import { motion } from 'motion/react';
 import axios from 'axios';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -78,10 +79,10 @@ export default function ManageAccount() {
     try {
       setLoading(true);
       await axios.patch('/api/update-profile', formData);
-      alert('Profile updated successfully');
+      toast.success('Profile updated successfully');
     } catch (error) {
       console.error(error);
-      alert('Failed to update profile');
+      toast.error('Password does not match');
     } finally {
       setLoading(false);
     }
@@ -97,7 +98,6 @@ export default function ManageAccount() {
         animate="visible"
         className="mx-auto max-w-3xl px-4 pb-12"
       >
-        {/* Header */}
         <div className="border-border sticky top-0 z-40 mb-6 border-b bg-neutral-50/80 py-5 backdrop-blur">
           <div className="flex items-center gap-6">
             <Link
@@ -111,12 +111,10 @@ export default function ManageAccount() {
           </div>
         </div>
 
-        {/* Card */}
         <motion.div
           variants={itemVariants}
           className="rounded-2xl bg-white shadow-sm"
         >
-          {/* Avatar */}
           <div className="flex flex-col items-center gap-3 p-6">
             <div className="relative size-28 overflow-hidden rounded-full bg-neutral-200">
               {preview ? (
@@ -134,7 +132,6 @@ export default function ManageAccount() {
                 </span>
               )}
 
-              {/* Camera */}
               <label className="absolute right-1 bottom-1 flex size-9 cursor-pointer items-center justify-center rounded-full bg-black text-white shadow">
                 <Camera size={16} />
                 <input
@@ -151,7 +148,6 @@ export default function ManageAccount() {
             </p>
           </div>
 
-          {/* Personal Info */}
           <div className="border-border border-t p-6">
             <h3 className="mb-4 font-medium">Personal Info</h3>
 
@@ -185,7 +181,6 @@ export default function ManageAccount() {
             </div>
           </div>
 
-          {/* Change Password */}
           <div className="border-border border-t p-6">
             <h3 className="mb-4 font-medium">Change Password</h3>
 
