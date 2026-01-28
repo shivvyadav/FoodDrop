@@ -34,7 +34,7 @@ const FoodCard = ({ food }: Props) => {
   return (
     <div className="relative flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white p-2 shadow-sm transition hover:shadow-md">
       <span
-        className={`absolute top-2 left-2 rounded-full ${food?.type === 'Veg' ? 'bg-green-500' : 'bg-red-500'} px-2 py-0.5 text-xs text-white backdrop-blur-md`}
+        className={`absolute top-2 left-2 z-40 rounded-full ${food?.type === 'Veg' ? 'bg-green-500' : 'bg-red-500'} px-2 py-0.5 text-xs text-white backdrop-blur-md`}
       >
         {food?.type || ''}
       </span>
