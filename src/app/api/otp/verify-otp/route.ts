@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import connectDB from '@/lib/db';
+import emitEventHandler from '@/lib/emitEventHandler';
 import DeliveryAssignment from '@/models/DeliveryAssignment';
 import Order from '@/models/Order';
 import User from '@/models/User';
@@ -44,12 +45,21 @@ export async function POST(req: NextRequest) {
     user.verifyCodeExpiry = undefined;
     await user.save();
 
-    await Order.updateOne({ _id: orderId }, { $set: { status: 'delivered' } });
+    await Order.updateOne(
+      { _id: orderId },
+      { $set: { status: 'delivered', isPaid: true, deliveredAt: new Date() } },
+    );
 
     await DeliveryAssignment.updateOne(
       { orderId: orderId },
-      { $set: { assignedTo: null, status: 'completed' } },
+      { $set: { status: 'completed' } },
     );
+
+    await emitEventHandler('orderDelivered', {
+      orderId: orderId,
+      isPaid: true,
+      status: 'delivered',
+    });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
