@@ -2,8 +2,10 @@
 import { IconSearch } from '@tabler/icons-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SearchComponent() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -21,6 +23,17 @@ export default function SearchComponent() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  const handleSearch = () => {
+    const query = search.trim().toLowerCase();
+    router.replace(query ? `/home?q=${encodeURIComponent(query)}` : '/home');
+    setOpen(false);
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch();
+  };
+
   return (
     <div ref={wrapperRef} className="relative flex">
       <button
@@ -32,7 +45,7 @@ export default function SearchComponent() {
       </button>
 
       <div className="hidden lg:block">
-        <div className="relative">
+        <form className="relative" onSubmit={onSubmit}>
           <IconSearch className="absolute top-2 right-3 size-5 text-neutral-400" />
           <input
             type="text"
@@ -41,12 +54,13 @@ export default function SearchComponent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </div>
+        </form>
       </div>
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.form
+            onSubmit={onSubmit}
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -61,7 +75,7 @@ export default function SearchComponent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </motion.div>
+          </motion.form>
         )}
       </AnimatePresence>
     </div>
