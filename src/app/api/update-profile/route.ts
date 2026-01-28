@@ -57,9 +57,6 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (image) {
-      const arrayBuffer = await image.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-
       const uploadedImageUrl = await uploadOnCloudinary(image);
 
       if (!uploadedImageUrl) {
