@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, foods }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: 'Internal Server Error' },
+      { success: false, message: `Internal server error ${error}` },
       { status: 500 },
     );
   }
