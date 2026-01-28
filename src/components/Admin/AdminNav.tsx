@@ -6,7 +6,7 @@ export default async function AdminNav() {
   const session = await auth();
 
   return (
-    <div className="fixed top-0 left-0 z-30 flex h-18 w-full items-center justify-between bg-white px-4 shadow lg:px-16">
+    <div className="fixed top-0 left-0 z-30 flex h-18 w-full items-center justify-between bg-white px-4 shadow lg:px-16 xl:px-74">
       <Logo />
       <div className="flex items-center gap-4">
         <AdminMenu user={session?.user} />
