@@ -37,7 +37,6 @@ export default function Hero() {
       className="rounded-xl bg-zinc-800 text-white"
     >
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 pt-10 pb-4 md:grid-cols-2 md:gap-12 lg:pb-16">
-        {/* TEXT */}
         <motion.div
           variants={item}
           className="order-2 text-center md:order-1 md:text-left"
@@ -56,7 +55,6 @@ export default function Hero() {
             Fresh, delicious meals delivered fast — no nonsense, no delays.
           </motion.p>
 
-          {/* MOBILE CAROUSEL */}
           <motion.div
             variants={item}
             className="mt-6 flex justify-center md:hidden"
@@ -95,7 +93,6 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* CTA */}
           <motion.div
             variants={item}
             className="mt-7 flex flex-wrap justify-center gap-4 md:justify-start"
@@ -108,7 +105,6 @@ export default function Hero() {
             </button>
           </motion.div>
 
-          {/* STATS */}
           <motion.div variants={item} className="mt-8">
             <p className="text-xs text-zinc-400">4.9 / 5 ⭐</p>
             <p className="text-2xl font-bold">1000+</p>
@@ -116,7 +112,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* DESKTOP CAROUSEL */}
         <motion.div
           variants={item}
           className="relative order-1 hidden justify-center md:flex"
@@ -142,12 +137,10 @@ export default function Hero() {
               </AnimatePresence>
             </div>
 
-            {/* BADGE */}
             <div className="absolute top-10 right-8 rounded-full bg-black/40 px-4 py-2 text-xs font-medium backdrop-blur-md">
               Fastest Delivery 🚚
             </div>
 
-            {/* CONTROLS */}
             <button
               onClick={prev}
               className="absolute top-1/2 -left-4 -translate-y-1/2 rounded-full bg-zinc-700 p-2 hover:bg-zinc-600"
@@ -161,7 +154,6 @@ export default function Hero() {
               <ChevronLeft size={22} className="rotate-180" />
             </button>
 
-            {/* PRODUCT */}
             <div className="mt-4 text-center">
               <p className="text-sm text-zinc-400">Burger</p>
               <p className="text-xl font-bold">Rs. 100</p>

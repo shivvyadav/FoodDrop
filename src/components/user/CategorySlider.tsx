@@ -1,21 +1,32 @@
 'use client';
 
 import Image from 'next/image';
-import hamburger from '@/assets/category/hamburger.png';
+import hamburger from '@/assets/category/cheese-burger.png';
+import pizza from '@/assets/category/pizza.png';
+import momo from '@/assets/category/momo.png';
+import chowmein from '@/assets/category/ramen.png';
+import chatpate from '@/assets/category/chatpate.png';
+import panipuri from '@/assets/category/pani-puri.png';
+import biryani from '@/assets/category/biryani.png';
+import beverages from '@/assets/category/drink.png';
+import desserts from '@/assets/category/ice.png';
+import bakery from '@/assets/category/cake.png';
+import icecream from '@/assets/category/ice.png';
+import drinks from '@/assets/category/soft-drink.png';
 
 const categories = [
-  { name: 'Pizza', icon: hamburger },
+  { name: 'Pizza', icon: pizza },
   { name: 'Burgers', icon: hamburger },
-  { name: 'Momos', icon: hamburger },
-  { name: 'Chowmein', icon: hamburger },
-  { name: 'Chatpate', icon: hamburger },
-  { name: 'Pani Puri', icon: hamburger },
-  { name: 'Biryani', icon: hamburger },
-  { name: 'Beverages', icon: hamburger },
-  { name: 'Desserts', icon: hamburger },
-  { name: 'Bakery', icon: hamburger },
-  { name: 'Ice Cream', icon: hamburger },
-  { name: 'Drinks', icon: hamburger },
+  { name: 'Momos', icon: momo },
+  { name: 'Chowmein', icon: chowmein },
+  { name: 'Chatpate', icon: chatpate },
+  { name: 'Pani Puri', icon: panipuri },
+  { name: 'Biryani', icon: biryani },
+  { name: 'Beverages', icon: beverages },
+  { name: 'Desserts', icon: desserts },
+  { name: 'Bakery', icon: bakery },
+  { name: 'Ice Cream', icon: icecream },
+  { name: 'Drinks', icon: drinks },
 ];
 
 export default function CategorySlider() {
