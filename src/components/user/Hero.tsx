@@ -154,12 +154,10 @@ export default function Hero() {
               <ChevronLeft size={22} className="rotate-180" />
             </button>
 
-            <div className="mt-4 text-center">
-              <p className="text-sm text-zinc-400">Burger</p>
-              <p className="text-xl font-bold">Rs. 100</p>
-              <button className="mt-2 rounded-full bg-orange-400 p-2 text-black hover:bg-orange-300">
-                <Plus size={18} />
-              </button>
+            <div className="mt-4 text-center text-neutral-300 font-medium">
+              <p>Favorite and most</p>
+              <p>selling </p>
+              <p>food items</p>
             </div>
           </div>
         </motion.div>
