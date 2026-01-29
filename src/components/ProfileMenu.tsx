@@ -3,7 +3,13 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { signOut } from 'next-auth/react';
-import { ListOrdered, LogOut, Settings, ShoppingCart } from 'lucide-react';
+import {
+  ListOrdered,
+  LogOut,
+  Settings,
+  ShoppingBag,
+  ShoppingCart,
+} from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
@@ -32,7 +38,7 @@ export default function ProfileMenu({ user }: { user: any }) {
           onClick={() => router.push('/cart')}
           className="relative flex size-8 items-center justify-center rounded-full bg-white"
         >
-          <ShoppingCart className="size-5 text-black" />
+          <ShoppingBag className="size-5.5 text-neutral-800" />
           <span className="text-md absolute -top-1.5 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
             {cartData?.length || 0}
           </span>
