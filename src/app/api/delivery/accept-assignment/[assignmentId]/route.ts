@@ -94,16 +94,6 @@ export async function GET(
       },
     });
 
-    // pull delivery boy from other assignments
-    // await DeliveryAssignment.updateMany(
-    //   {
-    //     _id: { $ne: assignment._id },
-    //     broadcastTo: session.user.id,
-    //     status: 'broadcasted',
-    //   },
-    //   { $pull: { broadcastTo: session.user.id } },
-    // );
-
     return NextResponse.json(
       {
         success: true,
