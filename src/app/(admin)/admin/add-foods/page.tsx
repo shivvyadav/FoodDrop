@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { LoaderCircle, Upload } from 'lucide-react';
 import { motion } from 'motion/react';
 import axios from 'axios';
+import { prependFoodData } from '@/redux/slices/foodSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import toast from 'react-hot-toast';
 export default function AddFoods() {
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
@@ -16,7 +21,6 @@ export default function AddFoods() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file));
@@ -32,7 +36,7 @@ export default function AddFoods() {
       formData.append('category', category);
       formData.append('type', type);
       formData.append('price', price.toString());
-      formData.append('image', image);
+      formData.append('image', image!);
 
       const res = await axios.post('/api/admin/add-food', formData);
 
@@ -44,8 +48,11 @@ export default function AddFoods() {
         setImage(null);
         setPreview(null);
       }
+      toast.success(res.data.message);
+      dispatch(prependFoodData(res.data.newFood));
     } catch (error) {
       console.error(error);
+      toast.error('error adding food');
     } finally {
       setLoading(false);
     }

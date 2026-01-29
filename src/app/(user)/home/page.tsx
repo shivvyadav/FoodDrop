@@ -2,8 +2,32 @@ import UserNav from '@/components/user/UserNav';
 import Hero from '@/components/user/Hero';
 import CategorySlider from '@/components/user/CategorySlider';
 import FoodGrid from '@/components/user/food/FoodGrid';
+import Food, { IFood } from '@/models/Food';
+import connectDB from '@/lib/db';
 
-export default async function page() {
+export default async function page({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  await connectDB();
+  const { q } = await searchParams;
+  let foods: IFood[] = [];
+
+  if (q) {
+    const dbFoods = await Food.find({
+      $or: [
+        { name: { $regex: q, $options: 'i' } },
+        { category: { $regex: q, $options: 'i' } },
+      ],
+    });
+
+    foods = dbFoods.map((food) => ({
+      ...food.toObject(),
+      _id: food._id.toString(),
+    }));
+  }
+
   return (
     <>
       <UserNav />
@@ -16,7 +40,7 @@ export default async function page() {
         <h2 className="my-4 text-xl font-semibold text-neutral-800 lg:my-7">
           Best Selling Foods
         </h2>
-        <FoodGrid />
+        <FoodGrid searchedFoods={foods} />
       </div>
     </>
   );

@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -44,8 +43,6 @@ export default function CartPage() {
   const discount = subtotal * 0.1;
   const delivery = cartData.length * 50;
   const total = Math.round(subtotal - discount + delivery);
-
-  useEffect(() => {}, [cartData]);
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -99,6 +96,10 @@ export default function CartPage() {
                         alt={item.name}
                         width={80}
                         height={80}
+                        style={{
+                          width: 'auto',
+                          height: 'auto',
+                        }}
                         className="h-20 w-20 rounded-xl object-cover"
                       />
                       <div>

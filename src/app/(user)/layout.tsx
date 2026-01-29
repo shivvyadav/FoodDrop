@@ -1,24 +1,24 @@
-import AdminNav from '@/components/Admin/AdminNav';
+import UserNav from '@/components/user/UserNav';
 import type { Metadata } from 'next';
-import InitAllOrders from '@/Init/InitAllOrders';
-import InitAdminSocket from '@/Init/InitAdminSocket';
+import InitUserSocket from '@/Init/InitUserSocket';
 
 export const metadata: Metadata = {
   title: 'FoodDrop | Admin-Panel',
   description: 'FoodDrop - Order food online from best food delivery service',
 };
 
-export default async function AdminLayout({
+export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <section className="min-h-screen">
-      <AdminNav />
-      <InitAllOrders />
-      <InitAdminSocket />
-      <main>{children}</main>
+      <main>
+        <InitUserSocket />
+        {/* <UserNav /> */}
+        {children}
+      </main>
     </section>
   );
 }

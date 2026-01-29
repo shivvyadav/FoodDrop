@@ -22,6 +22,8 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import OrderSuccess from '@/components/user/OrderSuccess';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -70,6 +72,7 @@ export default function CheckoutPage() {
   );
   const [loading, setLoading] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   useEffect(() => {
     if (userData) {
@@ -143,7 +146,7 @@ export default function CheckoutPage() {
 
   const handleCodPayment = async () => {
     if (!position) {
-      alert('Please select your location on the map.');
+      toast('select your location');
       return;
     }
 
@@ -153,6 +156,8 @@ export default function CheckoutPage() {
         userId: userData?._id,
         items: cartData.map((item) => ({
           foodId: item._id,
+          name: item.name,
+          image: item.image,
           quantity: item.quantity,
           price: item.price,
         })),
@@ -165,7 +170,7 @@ export default function CheckoutPage() {
         },
       });
 
-      router.push('/order-success');
+      setOrderSuccess(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -175,7 +180,7 @@ export default function CheckoutPage() {
 
   const handleOnlinePayment = async () => {
     if (!position) {
-      alert('Please select your location on the map.');
+      toast('select your location');
       return;
     }
 
@@ -185,6 +190,8 @@ export default function CheckoutPage() {
         userId: userData?._id,
         items: cartData.map((item) => ({
           foodId: item._id,
+          name: item.name,
+          image: item.image,
           quantity: item.quantity,
           price: item.price,
         })),
@@ -197,7 +204,6 @@ export default function CheckoutPage() {
         },
       });
 
-      console.log(res.data);
       window.location.href = res.data.url;
     } catch (err) {
       console.error(err);
@@ -205,6 +211,8 @@ export default function CheckoutPage() {
       setOrderLoading(false);
     }
   };
+
+  if (orderSuccess) return <OrderSuccess />;
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -228,9 +236,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-3 lg:max-xl:gap-4">
-          {/* LEFT */}
           <div className="space-y-6 lg:col-span-2">
-            {/* ADDRESS */}
             <motion.div
               variants={itemVariants}
               className="border-border rounded-2xl border bg-white p-5"
@@ -330,7 +336,6 @@ export default function CheckoutPage() {
               </div>
             </motion.div>
 
-            {/* MAP */}
             <motion.div
               variants={itemVariants}
               className="border-border relative h-80 overflow-hidden rounded-2xl border bg-neutral-100 p-2"
@@ -347,7 +352,6 @@ export default function CheckoutPage() {
             </motion.div>
           </div>
 
-          {/* RIGHT */}
           <motion.div
             variants={itemVariants}
             className="border-border h-fit rounded-2xl border bg-white p-5 sm:p-6 lg:sticky lg:top-20"
