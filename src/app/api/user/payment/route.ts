@@ -53,8 +53,8 @@ export async function POST(req: NextRequest) {
       })),
       metadata: { orderId: newOrder._id.toString() },
       mode: 'payment',
-      success_url: `${process.env.NEXT_BASE_URL}/order-success`,
-      cancel_url: `${process.env.NEXT_BASE_URL}/order-cancel`,
+      success_url: `${process.env.NEXT_BASE_URL}/checkout`,
+      cancel_url: `${process.env.NEXT_BASE_URL}/checkout`,
     });
 
     return NextResponse.json({ url: session.url }, { status: 200 });
