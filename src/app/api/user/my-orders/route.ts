@@ -5,7 +5,7 @@ import Order from '@/models/Order';
 
 export async function GET(req: NextRequest) {
   try {
-    connectDB();
+    await connectDB();
     const session = await auth();
     if (!session || !session?.user) {
       return NextResponse.json(
