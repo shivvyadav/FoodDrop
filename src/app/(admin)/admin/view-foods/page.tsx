@@ -27,8 +27,8 @@ export default function ViewFoods() {
       {foodData.length ? (
         <h1 className="mb-4 text-lg font-bold text-neutral-800">Food Items</h1>
       ) : (
-        <h1 className="mb-4 text-lg font-bold text-neutral-800">
-          No food items found
+        <h1 className="mb-4 text-lg font-medium text-neutral-800">
+          No food items
         </h1>
       )}
       <div className="flex flex-col gap-4">

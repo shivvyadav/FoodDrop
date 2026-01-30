@@ -35,6 +35,12 @@ export default function MyOrderPage() {
           </div>
         </div>
 
+        {orderData.length === 0 && (
+          <p className="mt-4 text-center font-medium text-gray-600">
+            No orders found
+          </p>
+        )}
+
         {orderData.map((order: any) => (
           <OrderCard
             key={order._id?.toString()}
