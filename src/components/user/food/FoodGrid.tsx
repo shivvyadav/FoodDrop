@@ -9,7 +9,9 @@ const FoodGrid = ({ searchedFoods }: { searchedFoods: IFood[] }) => {
 
   if (!foods.length) {
     return (
-      <p className="text-center text-neutral-500">No food items available</p>
+      <p className="pb-12 font-medium text-neutral-600">
+        No food items available
+      </p>
     );
   }
 
