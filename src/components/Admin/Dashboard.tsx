@@ -3,7 +3,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { motion } from 'motion/react';
-import { Loader, ShoppingBag, DollarSign, Truck, Users } from 'lucide-react';
+import { Loader, ShoppingBag, Truck, Users, Coins } from 'lucide-react';
 import StatCard from './StatCard';
 import IndexLineChart from './IndexLineChart';
 import OrderList from './OrderList';
@@ -44,7 +44,7 @@ export default function Dashboard({ totalUsers }: { totalUsers: number }) {
         <StatCard
           title="Revenue"
           value={`Rs ${totalRevenue.toFixed(2)}`}
-          icon={DollarSign}
+          icon={Coins}
           gradient="bg-gradient-to-r from-orange-400 to-orange-500"
         />
         <StatCard
