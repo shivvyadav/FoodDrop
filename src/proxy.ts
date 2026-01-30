@@ -3,62 +3,62 @@ import { getToken } from 'next-auth/jwt';
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
   const token = await getToken({
     req,
     secret: process.env.AUTH_SECRET,
   });
-  // console.log(token);
-  const Role = token?.role;
 
-  const publicPages = ['/', '/login', '/register'];
-  const protectedPages = ['/home', '/admin', '/delivery'];
-  const notUserPages = ['/admin', '/delivery'];
-  const notDeliveryPages = ['/admin', '/home'];
-  const notAdminPages = ['/delivery', '/home'];
+  const role = token?.role;
 
-  // Logged-out users should not access protected pages
-  if (!token && protectedPages.some((path) => pathname === path)) {
+  const isLandingPage = pathname === '/';
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isDeliveryRoute = pathname.startsWith('/delivery');
+  const isUserRoute =
+    pathname.startsWith('/home') ||
+    pathname.startsWith('/cart') ||
+    pathname.startsWith('/checkout') ||
+    pathname.startsWith('/my-orders') ||
+    pathname.startsWith('/track-order');
+
+  const isProfileRoute = pathname.startsWith('/edit-profile');
+
+  if (
+    !token &&
+    (isAdminRoute || isDeliveryRoute || isUserRoute || isProfileRoute)
+  ) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  // Logged-in users should not see auth pages
-  if (token && publicPages.some((path) => pathname === path)) {
+  if (token && (isLandingPage || isAuthPage)) {
+    if (role === 'admin') {
+      return NextResponse.redirect(new URL('/admin', req.url));
+    }
+    if (role === 'delivery') {
+      return NextResponse.redirect(new URL('/delivery', req.url));
+    }
     return NextResponse.redirect(new URL('/home', req.url));
   }
 
-  if (
-    token &&
-    Role === 'user' &&
-    notUserPages.some((path) => pathname === path)
-  ) {
-    return NextResponse.redirect(new URL('/home', req.url));
-  }
+  if (token) {
+    if (role === 'admin' && (isDeliveryRoute || isUserRoute)) {
+      return NextResponse.redirect(new URL('/admin', req.url));
+    }
 
-  if (
-    token &&
-    Role === 'delivery' &&
-    notDeliveryPages.some((path) => pathname === path)
-  ) {
-    return NextResponse.redirect(new URL('/delivery', req.url));
-  }
+    if (role === 'delivery' && (isAdminRoute || isUserRoute)) {
+      return NextResponse.redirect(new URL('/delivery', req.url));
+    }
 
-  if (
-    token &&
-    Role === 'admin' &&
-    notAdminPages.some((path) => pathname === path)
-  ) {
-    return NextResponse.redirect(new URL('/admin', req.url));
+    if (role === 'user' && (isAdminRoute || isDeliveryRoute)) {
+      return NextResponse.redirect(new URL('/home', req.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/',
-    '/home',
-    '/register',
-    '/login',
-    '/((?!api|_next/static|_next/image|.*\\.png$).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
